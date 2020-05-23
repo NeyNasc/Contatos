@@ -1,47 +1,71 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import  Paletas from '../color/Paletas';
-import CardContatos from './CardContatos';
-import Dimensoes from '../dimensions/Dimensoes';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard, Platform} from 'react-native';
+import { CardContatos } from './CardContatos';
+import { withNavigation } from 'react-navigation';
+import Dimensoes from '../dimensions/Dimensoes'
+import Paletas from '../color/Paletas'
+import ButtonNavegacao from './ButtonNavegacao';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-const ItemContatos =(props) => {
+const ItemContatos = (props) => {
 
-return(
-    <TouchableOpacity onLongPress={props.del.bind(this, props.keys)}>
-    
-            <View style={estilos.lista}>
-              <Text style={estilos.id}>{'ID: '+props.keys}</Text>
-              <Text>{'NOME :  '+props.contato}</Text>
-              <Text>{'TEL  :   '+props.telefone}</Text>
+    const confirmaExclusao = () => {
+        Alert.alert(
+            'Excluir',
+            'Deseja mesmo excluir?',
+            [
+                {text: 'Sim', style: 'default', onPress: () => props.onDelete(props.chave)},
+                {text: 'Não', style: 'default', onPress:  Keyboard.dismiss()},
+            ]
+        );
+       
+    }
+
+    return(
+        <TouchableOpacity onPress={() => props.onClick(props.chave)} onLongPress={confirmaExclusao}>
+            <View styles={styles.item}>
+                <CardContatos styles={styles.cartao}>
+                <View style={styles.displayFlex}>
+                    <Text style={styles.text}>  NOME : </Text><Text>{props.nome}</Text>
+                </View>
+                <View style={styles.displayFlex}>
+                    <Text style={styles.text}>  TELEFONE : </Text><Text>{props.fone}</Text>
+                </View>
+                </CardContatos>
             </View>
-            
-    </TouchableOpacity>
-
-);
+        </TouchableOpacity>
+    );
 }
 
-const estilos = StyleSheet.create({
-  lista: {
-    margin: Dimensoes.dois,
-    padding: Dimensoes.quinze,
-    borderRadius: Dimensoes.dez,
-    
-    backgroundColor: Paletas.lista,
-    flexDirection: "column",
-    borderColor: Paletas.branco,
-  
-  },
 
-  id: {
-    fontSize: Dimensoes.vinte,
-    marginBottom: Dimensoes.zero,      
-    padding:1,
-    backgroundColor: Paletas.id,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: Paletas.branco
-  },
 
+const styles = StyleSheet.create ({
+    id: {
+        fontSize: Dimensoes.quinze,     
+        padding: Dimensoes.um,
+        backgroundColor: Paletas.preto,
+        textAlign: "center",
+        fontWeight: "bold",
+        color: Paletas.branco
+    },
+    item: {
+        flexDirection: 'row',
+    },
+    displayFlex: {
+        flexDirection: 'row'
+    },
+    cartao: {
+        flexDirection: 'column',
+        padding: Dimensoes.um,
+        margin: Dimensoes.cinco,
+        
+    },
+    text:{
+        fontWeight: "bold",
+        color: Paletas.preto,
+        fontSize: Dimensoes.quinze,
+        textAlign: 'left',
+    },
 });
 
-export default ItemContatos;
+export default withNavigation(ItemContatos);
