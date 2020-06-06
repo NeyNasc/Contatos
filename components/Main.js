@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, Alert,Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View,Button, FlatList,Image } from 'react-native';
 import InputContatos from './InputContatos';
 import ItemContatos from './ItemContatos';
 import Paletas from '../color/Paletas';
 import ViewContato from './ViewContato';
 import EditContato from  './EditContato';
 import Dimensoes from '../dimensions/Dimensoes'
+import * as Action from '../store/Contato-Action'
 import { withNavigation } from 'react-navigation';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Main = ({navigation}) => {
   const [contato, setContato] = useState ([]);
@@ -16,12 +17,17 @@ const Main = ({navigation}) => {
   const [modoEdit, setModoEdit] = useState(false);
   const [modoView, setModoView] = useState(false);
   const lista_contatos = useSelector(estado => estado.contatos.contatos);
+  const dispatch = useDispatch();
 
   function handleBack(){
     setModoAdd(false);
     setModoEdit(false);
     setModoView(false);
   }
+
+  useEffect(() => {
+    dispatch(Action.listarContatos())
+  }, [dispatch]);
 
   const handleSaveClick = (nome, fone) => {
     let id = calculateIndex();

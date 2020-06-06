@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 class Contato{
     constructor(id, nome, fone, imagem){
         this.id = id;

@@ -1,12 +1,12 @@
 import { Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack'
-import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import Main from '../components/Main';
+import Paletas from '../color/Paletas';
 import InputContatos from '../components/InputContatos';
 import EditContato from '../components/EditContato';
 import ViewContato from '../components/ViewContato';
 import ItemContatos from '../components/ItemContatos';
-import Main from '../components/Main';
-import Paletas from '../color/Paletas';
 
 const Navigation = createStackNavigator({
     CONTATOS: Main,

@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard,Platform, Image} from 'react-native';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard,Image} from 'react-native';
 import { CardContatos } from './CardContatos';
 import { withNavigation } from 'react-navigation';
-import Dimensoes from '../dimensions/Dimensoes'
-import Paletas from '../color/Paletas'
-import ButtonNavegacao from '../components/ButtonNavegacao';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import Dimensoes from '../dimensions/Dimensoes';
+import Paletas from '../color/Paletas';
+import * as Action from '../store/Contato-Action';
 
 const ItemContatos = (props) => {
+
+    const dispatch = useDispatch();
+
+    const del = (id) => {
+        dispatch(Action.deletarContato(id));
+    }
 
     const confirmaExclusao = () => {
         Alert.alert(
             'Excluir',
             'Deseja mesmo excluir?',
             [
-                {text: 'Sim', style: 'default', onPress: () => props.onDelete(props.id)},
+                {text: 'Sim', style: 'default', onPress: () => del(props.id)},
                 {text: 'Não', style: 'default', onPress:  Keyboard.dismiss()},
             ]
         );

@@ -13,12 +13,16 @@ const InputContatos = (props) => {
     
     const [nome, setNome] = useState ('');
     const [fone, setFone] = useState('');
-    const [id, setId] = useState(10);
     const dispatch = useDispatch();
     const [imagemURI, setImagemURI] = useState();
     const fotoTirada = imagemURI => {setImagemURI(imagemURI);}
     const mudouNome = (nome) => {setNome (nome)};
     const mudouFone = (fone) => {setFone(fone)};
+
+    function salvar(){
+        dispatch(Action.criarContato(nome, fone, imagemURI));
+        props.voltar();
+    }
 
     return (
         
@@ -28,14 +32,7 @@ const InputContatos = (props) => {
                 <TextInput style={styles.input} placeholder="TELEFONE" value={fone} onChangeText={mudouFone} keyboardType={'numeric'}/>
                 <View style={styles.buttons}>
                     <View style={styles.buttons}>
-                        <Button title="Salvar" onPress={()=>{
-                             dispatch(Action.criarContato(nome, fone, imagemURI));
-                             setFone('');
-                             setNome('');
-                             setImagemURI(null);
-                             props.voltar();
-        
-                        }}color={Paletas.principal} />
+                        <Button title="Salvar" onPress={salvar} color={Paletas.principal} />
                     </View>
                     <View style={styles.buttons}> 
                         <Button  title="Voltar" onPress={() => props.voltar()} color={Paletas.cinza}/>

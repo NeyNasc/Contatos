@@ -7,7 +7,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Paletas from '../color/Paletas';
 import Dimensoes from '../dimensions/Dimensoes';
 import * as Action from '../store/Contato-Action';
-import TakeFoto from './TakeFoto';
+import Takefoto from './TakeFoto';
 
 
 const EditContato = (props) => {
@@ -19,11 +19,12 @@ const EditContato = (props) => {
     const [imagemURI, setImagemURI] = useState(props.imagem);
     const fotoTirada = imagemURI => {setImagemURI(imagemURI);}
     
-    function limpaEnvia(){
-        props.handleSaveClick(nome, fone);
-        setFone('');
-        setNome('');
+    function salvar(){
+        dispatch(Action.atualizarContato(props.id, nome, fone, imagemURI));
+        props.voltar();
     }
+
+
 
     return (
         <View style={styles.item}>
@@ -32,11 +33,11 @@ const EditContato = (props) => {
                 <Text style={styles.text}>NOME : </Text><TextInput style={styles.input} placeholder="Nome" value={nome} onChangeText={mudouNome}/>
                 </View> 
             <View style={styles.displayFlex}>    
-                <Text style={styles.text}>TELEFONE : </Text><TextInput style={styles.input} placeholder="Telefone" value={fone} onChangeText={mudouFone} keyboardType={'numeric'}/>
+                <Text style={styles.text}>TELEFONE : </Text><TextInput style={styles.input} placeholder="Telefone" value={fone.toString()} onChangeText={mudouFone} keyboardType={'numeric'}/>
             </View> 
             <View style={styles.buttons}> 
                 <View style={styles.buttons}> 
-                    <Button title="Salvar" onPress={limpaEnvia} color={Paletas.principal}/>
+                    <Button title="Salvar" onPress={salvar} color={Paletas.principal}/>
                 </View>
                 <View style={styles.buttons}>     
                     <Button title="Pagina Principal" onPress={() => props.voltar()} color={Paletas.cinza}/>

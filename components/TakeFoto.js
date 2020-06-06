@@ -19,21 +19,13 @@ const Takefoto = props => {
     return (
         <View style={styles.principal}>
             <View style={styles.previewDaImagem}>
-                {
-                    !imagemURI ?
-                    <Text>Sem foto</Text>
-                    :
-                    <TouchableOpacity onPress={takeFoto} >
+                {!imagemURI ?
+                <Text>Sem foto</Text>:
+                <TouchableOpacity onPress={takeFoto} >
                     <Image style={styles.imagem} source={{ uri: props.imagem }}/>
-                    </TouchableOpacity>
-                    
-                }
+                </TouchableOpacity>}
             </View>
-            <Button
-            title="Inserir foto do contato"
-            color={Paletas.preto}
-            onPress={takeFoto}
-            />
+                <Button title="Inserir foto do contato"color={Paletas.preto}onPress={takeFoto}/>
         </View>
         )
 };
