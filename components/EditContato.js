@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import {View, TextInput, Button, StyleSheet, Platform,Text} from 'react-native';
+import { useDispatch } from 'react-redux';
+import {View, TextInput, Button, StyleSheet, Platform,Text, Image} from 'react-native';
 import { withNavigation } from 'react-navigation';
 import ButtonNavegacao from './ButtonNavegacao';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Paletas from '../color/Paletas';
 import Dimensoes from '../dimensions/Dimensoes';
+import * as Action from '../store/Contato-Action';
+import TakeFoto from './TakeFoto';
+
 
 const EditContato = (props) => {
     const [nome, setNome] = useState (props.nome);
     const [fone, setFone] = useState(props.fone);
     const mudouNome = (nome) => {setNome (nome);}
     const mudouFone = (fone) => {setFone(fone);}
-
+    const dispatch = useDispatch();
+    const [imagemURI, setImagemURI] = useState(props.imagem);
+    const fotoTirada = imagemURI => {setImagemURI(imagemURI);}
+    
     function limpaEnvia(){
         props.handleSaveClick(nome, fone);
         setFone('');
@@ -20,6 +27,7 @@ const EditContato = (props) => {
 
     return (
         <View style={styles.item}>
+            <Image style={styles.imagem} source={{ uri: props.imagem }} />
             <View style={styles.displayFlex}>
                 <Text style={styles.text}>NOME : </Text><TextInput style={styles.input} placeholder="Nome" value={nome} onChangeText={mudouNome}/>
                 </View> 
@@ -85,6 +93,10 @@ textAlign: 'left',
 },
 displayFlex: {
 textAlign: 'left'
+},
+imagem: {
+    width: 200,
+    height: 200,
 }
 });
 

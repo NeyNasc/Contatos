@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard, Platform} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard,Platform, Image} from 'react-native';
 import { CardContatos } from './CardContatos';
 import { withNavigation } from 'react-navigation';
 import Dimensoes from '../dimensions/Dimensoes'
 import Paletas from '../color/Paletas'
-import ButtonNavegacao from './ButtonNavegacao';
+import ButtonNavegacao from '../components/ButtonNavegacao';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 const ItemContatos = (props) => {
@@ -14,7 +14,7 @@ const ItemContatos = (props) => {
             'Excluir',
             'Deseja mesmo excluir?',
             [
-                {text: 'Sim', style: 'default', onPress: () => props.onDelete(props.chave)},
+                {text: 'Sim', style: 'default', onPress: () => props.onDelete(props.id)},
                 {text: 'Não', style: 'default', onPress:  Keyboard.dismiss()},
             ]
         );
@@ -22,14 +22,17 @@ const ItemContatos = (props) => {
     }
 
     return(
-        <TouchableOpacity onPress={() => props.onClick(props.chave)} onLongPress={confirmaExclusao}>
+        <TouchableOpacity onPress={() => props.onClick(props.id)} onLongPress={confirmaExclusao}>
             <View styles={styles.item}>
                 <CardContatos styles={styles.cartao}>
+                <Image style={styles.imagem} source={{ uri: props.imagem }} />
+                <View style={styles.item}>
                 <View style={styles.displayFlex}>
                     <Text style={styles.text}>  NOME : </Text><Text>{props.nome}</Text>
                 </View>
                 <View style={styles.displayFlex}>
                     <Text style={styles.text}>  TELEFONE : </Text><Text>{props.fone}</Text>
+                </View>
                 </View>
                 </CardContatos>
             </View>
@@ -49,14 +52,15 @@ const styles = StyleSheet.create ({
         color: Paletas.branco
     },
     item: {
-        flexDirection: 'row',
+        flexDirection: 'column',
     },
     displayFlex: {
+        display: 'flex',
         flexDirection: 'row'
     },
     cartao: {
-        flexDirection: 'column',
-        padding: Dimensoes.um,
+        flexDirection: 'row',
+        padding: Dimensoes.dez,
         margin: Dimensoes.cinco,
         
     },
@@ -66,6 +70,11 @@ const styles = StyleSheet.create ({
         fontSize: Dimensoes.quinze,
         textAlign: 'left',
     },
+    imagem: {
+        flexDirection: 'column',
+        width: 80,
+        height: 80
+    }
 });
 
 export default withNavigation(ItemContatos);

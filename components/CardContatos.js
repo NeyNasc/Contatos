@@ -18,12 +18,12 @@ cartao: {
     shadowOffset: {
     width: Dimensoes.zero,
     height: Dimensoes.dois,
-    backgroundColor: Paletas.cinza
-
-
+    backgroundColor: Paletas.cinza,
     },
     backgroundColor: Paletas.cinza,
     elevation: Dimensoes.quatro,
     padding: Dimensoes.cinco,
+    borderWidth: Dimensoes.quatro,
+    borderColor: Dimensoes.preto
     }
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Platform, Button} from 'react-native';
+import { StyleSheet, Text, View, Platform, Button, Image,} from 'react-native';
 import { CardContatos } from './CardContatos';
 import Dimensoes from '../dimensions/Dimensoes'
 import Paletas from '../color/Paletas';
@@ -10,17 +10,20 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 const ViewContato = (props) => {
    
     return(
-        <View>
+        <View >
             <View style={styles.displayFlex}>
                 <Text style={styles.tableHeader}>CONTATO</Text>
             </View>
             <View >
-                <CardContatos>
+                <CardContatos styles={styles.container}>
                     <Text style={styles.id}>{'ID : ' + props.id}</Text>
                     <View style={styles.displayFlex}>
+                    <Image style={styles.imagem} source={{ uri: props.imagem }} />
+                    </View>
+                    <View style={styles.displayText}>
                     <Text style={styles.text}>NOME : </Text><Text>{props.nome}</Text>
                     </View>
-                    <View style={styles.displayFlex}>
+                    <View style={styles.displayText}>
                     <Text style={styles.text}>TELEFONE : </Text><Text>{props.fone}</Text>
                     </View>
                 </CardContatos>
@@ -56,6 +59,10 @@ ViewContato.navigationOptions = dadosNav => {
 }
 
 const styles = StyleSheet.create ({
+    container:{
+        borderWidth: Dimensoes.quatro,
+        borderColor: Dimensoes.preto
+    },
     item: {
         backgroundColor: Paletas.planoFundo,
     },
@@ -71,20 +78,25 @@ const styles = StyleSheet.create ({
         justifyContent: 'space-around',
         padding: Dimensoes.quarenta,
         margin: Dimensoes.vinte,
-        marginRight: Dimensoes.quinze
     },
     
     tableHeader: {
         fontWeight: 'bold',
         marginBottom: Dimensoes.dez,
-        color: Paletas.principal,
-        fontSize: Dimensoes.trinta
+        color: Paletas.preto,
+        fontSize: Dimensoes.trinta,
+        textAlign: 'center',
+        alignItems: 'center'
     },
     displayFlex: {
         display: 'flex',
         flexDirection: 'row',
-        
-        textAlign: 'left'
+        textAlign: 'center',
+        alignItems: 'center'
+    },
+    displayText: {
+        flexDirection: 'row',
+        textAlign: 'left',
     },
     text:{
     fontWeight: "bold",
@@ -95,12 +107,19 @@ const styles = StyleSheet.create ({
     },
     id: {
         fontSize: Dimensoes.quinze,   
-        padding: Dimensoes.um,
+        padding: Dimensoes.cinco,
         backgroundColor: Paletas.preto,
         textAlign: "center",
         fontWeight: "bold",
         color: Paletas.branco
-      },
+    },
+    imagem: {
+        margin: Dimensoes.dez,
+        width: Dimensoes.cem,
+        height: Dimensoes.cem,
+        display: 'flex',
+        flexDirection: 'row' ,
+    }
 });
 
 export default withNavigation(ViewContato);

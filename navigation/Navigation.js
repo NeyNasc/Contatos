@@ -10,13 +10,15 @@ import Paletas from '../color/Paletas';
 
 const Navigation = createStackNavigator({
     CONTATOS: Main,
-    Criar: InputContatos,
-    Editar: EditContato,
-    Item: ItemContatos,
-    Exibir: ViewContato
+    ADICIONAR: InputContatos,
+    EDITAR: EditContato,
+    ITEM: ItemContatos,
+    CONTATO: ViewContato
+    
+    
 }, { defaultNavigationOptions: {
         headerStyle: {
-            backgroundColor: 'white'
+            backgroundColor: Platform.OS === 'android' ? Paletas.principal : ''
     },
     headerTintColor: Platform.OS === 'android' ? Paletas.principal : Paletas.principal
     }

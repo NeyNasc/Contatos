@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList, Alert,Image } from 'react-native';
 import InputContatos from './InputContatos';
 import ItemContatos from './ItemContatos';
 import Paletas from '../color/Paletas';
@@ -7,6 +7,7 @@ import ViewContato from './ViewContato';
 import EditContato from  './EditContato';
 import Dimensoes from '../dimensions/Dimensoes'
 import { withNavigation } from 'react-navigation';
+import { useSelector } from 'react-redux';
 
 const Main = ({navigation}) => {
   const [contato, setContato] = useState ([]);
@@ -14,6 +15,7 @@ const Main = ({navigation}) => {
   const [contatoSelecionado, setContatoSelecionado] = useState({});
   const [modoEdit, setModoEdit] = useState(false);
   const [modoView, setModoView] = useState(false);
+  const lista_contatos = useSelector(estado => estado.contatos.contatos);
 
   function handleBack(){
     setModoAdd(false);
@@ -46,7 +48,7 @@ const Main = ({navigation}) => {
   }
 
   function findContatoIndex(){
-    return contato.indexOf(contatoSelecionado)
+    return contato.indexOf(contatoSelecionado.id)
   }
 
   function calculateIndex(){
@@ -64,7 +66,7 @@ const Main = ({navigation}) => {
   }
  
   const exibir = (key) => {
-    let filteredContato = contato.filter((c) => {return c.id == key });
+    let filteredContato = lista_contatos.filter((c) => {return c.id == key });
     setContatoSelecionado(filteredContato[0]);
     setModoView(true);
     setModoAdd(false);
@@ -80,38 +82,44 @@ const Main = ({navigation}) => {
     <View style={styles.container}>
       {modoAdd == false && modoEdit == false && modoView == false &&
         <View>
+          <View style={styles.displayFlex}>
+          <Image style={styles.icones} source={require('../icons/contact.png')} />
+          </View>
           <Text style={styles.title}>LISTA DE CONTATOS</Text>
-          {contato && contato.length > 0? 
+          {lista_contatos && lista_contatos.length > 0? 
             <FlatList
-              data={contato}
+              data={lista_contatos}
               renderItem={
               contato => (
-              <View style={styles.item}>
+              
               <ItemContatos 
-                chave={contato.item.id}
+                id={contato.item.id}
                 nome={contato.item.nome}
                 fone={contato.item.fone}
+                imagem={contato.item.imagem}
                 onDelete={removerContato}
                 onClick={exibir}
               />
-              </View>
+              
               )}
               keyExtractor={(item) => item.id.toString()}
             />
             :
             null
           }
-          <Button title="Inserir novo contato" color={Paletas.principal} onPress={() => {handleAddClick()}} />
+          <View style={styles.botao} >
+          <Button  title="Inserir novo contato"  onPress={() => {handleAddClick()}} />
+          </View>
       </View>
       }
       {modoAdd == true &&
         <InputContatos salvar={handleSaveClick} voltar={handleBack}/>
       }
       {modoView ==true&&
-          <ViewContato id={contatoSelecionado.id} nome={contatoSelecionado.nome} fone={contatoSelecionado.fone} voltar={handleBack} handleEdit={handleEditClick}/>
+          <ViewContato id={contatoSelecionado.id} nome={contatoSelecionado.nome} fone={contatoSelecionado.fone} imagem={contatoSelecionado.imagem} voltar={handleBack} handleEdit={handleEditClick}/>
       }
       {modoEdit == true &&
-        <EditContato id={contatoSelecionado.id} nome={contatoSelecionado.nome} fone={contatoSelecionado.fone} voltar={handleBack} handleSaveClick={handleSaveEdit} />
+        <EditContato id={contatoSelecionado.id} nome={contatoSelecionado.nome} fone={contatoSelecionado.fone} imagem={contatoSelecionado.imagem} voltar={handleBack} handleSaveClick={handleSaveEdit} />
       }
     </View>
   );
@@ -150,9 +158,22 @@ const styles = StyleSheet.create({
     
   },
   displayFlex: {
+    paddingTop: Dimensoes.quinze,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around'
+  },
+  icones: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Dimensoes.cem,
+    height: Dimensoes.cem,
+  },
+  botao:{
+    borderWidth: Dimensoes.quatro,
+    borderColor: Paletas.preto,
+    marginBottom:Dimensoes.trinta,
   }
 });
 
