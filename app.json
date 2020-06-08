@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "usjt_ccp3bn_bua_recursos_nativos",
-    "slug": "usjt_ccp3bn_bua_recursos_nativos",
+    "name": "Blank Template",
+    "slug": "lista_contato",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",

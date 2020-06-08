@@ -1,39 +1,38 @@
-import React, { useState } from 'react';
-import Navigation  from './navigation/Navigation';
+import React from 'react';
+import ContatoNavigator from './navegacao/ContatoNavigator';
+
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
-import Reducer from './store/Contato-Reducer';
-import { init } from './helpers/DB';
+import contatosReducer from './store/contatos-reducer';
 
-init().
-  then(() => {console.log("Base criada.");
-}).
-    catch((err) => {
-      console.log("Falha na criação da base.");
-      console.log(err);
-})
+import  { init } from './helpers/db';
+
+init()
+  .then(()=> {
+    console.log("Criação da base ocorreu com sucesso.");
+  }).catch((err) => {
+    console.log('Criação da base falhou.' + err);
+  });
 
 const rootReducer = combineReducers({
-  contatos: Reducer
-});
 
+  contatos: contatosReducer
+
+});
 
 const store = createStore(rootReducer, applyMiddleware(reduxThunk));
 
-class App extends React.Component {
-  constructor(props){
-    super(props)
-  }
+export default function App() {
 
-  render(){
-    return (
-      <Provider store={store}>
-          <Navigation/>
-      </Provider>
-    );
-  }
+  return (  
+    <Provider store={store}>
+
+      <ContatoNavigator />
+
+    </Provider>
+           
+  );
 }
 
-export default App;
 
