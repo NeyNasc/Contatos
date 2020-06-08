@@ -6,31 +6,31 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import contatosReducer from './store/contatos-reducer';
 
-import  { init } from './helpers/db';
 
-init()
+
+/*init()
   .then(()=> {
     console.log("Criação da base ocorreu com sucesso.");
   }).catch((err) => {
     console.log('Criação da base falhou.' + err);
-  });
+  });*/
 
-const rootReducer = combineReducers({
+//const rootReducer = combineReducers({
 
-  contatos: contatosReducer
+ // contatos: contatosReducer
 
-});
+//});
 
-const store = createStore(rootReducer, applyMiddleware(reduxThunk));
+//const store = createStore(rootReducer, applyMiddleware(reduxThunk));
 
 export default function App() {
 
   return (  
-    <Provider store={store}>
+    //<Provider store={store}>
 
       <ContatoNavigator />
 
-    </Provider>
+    //</Provider>
            
   );
 }

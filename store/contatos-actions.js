@@ -1,13 +1,20 @@
 import * as FileSystem from 'expo-file-system';
 
-import { inserirContato, buscarContatos } from '../helpers/db';
+//import { inserirContato, buscarContatos } from '../helpers/db';
+import ENV from '../env';
+import * as firebase from 'firebase';
+import 'firebase/firestore'
 
 export const ADD_CONTATO = 'ADD_CONTATO';
 export const DEL_CONTATO = 'DEL_CONTATO';
 export const ALT_CONTATO = 'ALT_CONTATO';
 export const LISTAR_CONTATOS = 'LISTAR_CONTATOS';
 
+if (!firebase.apps.length)
+  firebase.initializeApp(ENV);
 
+
+const db = firebase.firestore();
 
 export const addContato = (nomeContato , telefoneContato, imagem, latitude, longitude) => {
 
@@ -21,20 +28,21 @@ export const addContato = (nomeContato , telefoneContato, imagem, latitude, long
                 to: novoPath
             })
             let data = new Date().toString();
+            
+            db.collection('contatos').add({
+                nome: nomeContato,
+                telefone: telefoneContato,
+                imagem: novoPath,
+                lat: latitude,
+                lng: longitude,
+                data: data
+            })
 
-            const resultadoDB = await inserirContato(
-                nomeContato,
-                telefoneContato,
-                novoPath,
-                latitude,
-                longitude,
-                data
-            );
+            
+            console.log(db.collection('contatos').get());
 
-            console.log(resultadoDB);
-
-            dispatch({type: ADD_CONTATO, dadosContato: { id: resultadoDB.insertId, nomeContato: nomeContato, telefoneContato: telefoneContato,
-                 imagem: novoPath, lat: latitude , lng: longitude, data: data } })
+            //dispatch({type: ADD_CONTATO, dadosContato: { id: resultadoDB.insertId, nomeContato: nomeContato, telefoneContato: telefoneContato,
+              //   imagem: novoPath, lat: latitude , lng: longitude, data: data } })
 
         } catch(err){
             console.log(err);
@@ -43,7 +51,7 @@ export const addContato = (nomeContato , telefoneContato, imagem, latitude, long
     };       
 }
 
-export const listarContatos = () => {
+/*export const listarContatos = () => {
     return async dispatch => {
         try{
             const resultadoDB = await buscarContatos();
@@ -56,7 +64,7 @@ export const listarContatos = () => {
     }
 };
 
-
+*/
 export const delContato = (idContato) => {
 
     return {

@@ -35,7 +35,6 @@ const ContatoItem = (props) => {
         >
             <Image style={styles.imagem} source={{uri:props.imagem}}/>
             <View style={styles.infoContainer}>
-                <Text>{'Cod:        ' + props.keys}</Text>
                 <Text>{'Nome:       ' + props.contato}</Text>
                 <Text>{'Telefone:   ' + props.telefone}</Text>
                 <Text>{'latitude:   ' + props.lat}</Text>

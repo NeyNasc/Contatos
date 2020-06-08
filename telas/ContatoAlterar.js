@@ -1,35 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { View, StyleSheet, Text, Button, FlatList, TextInput, Image} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+//import { useSelector, useDispatch } from 'react-redux';
 
 import Cartao from '../components/Cartao';
 import ContatoInput from '../components/ContatoInput'
-import * as contatosActions from '../store/contatos-actions';
+//import * as contatosActions from '../store/contatos-actions';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import db from '../helpers/Firebase';
 
 const Contatos = (props) => {
+    const nome  = props.navigation.getParam('nome');
 
-    const dispatch = useDispatch()
+    const[contato, setContato] = useState([]);
 
-    const contatos = useSelector(estado => estado.contatos.contatos )
+    //const dispatch = useDispatch()
 
-    const [key, setKey] = useState(props.navigation.getParam('key'))
-    const[contato, setContato] = useState(contatos.filter(contato => contato.id === key));
+    //const contatos = useSelector(estado => estado.contatos.contatos )
+
+    console.log(nome)
+    useEffect(() => {
+        db.collection('contatos').where('nome', '==', nome).get()
+        .then((snapshot) => {
+            let aux =[];
+            snapshot.forEach(doc => {
+                aux.push({
+                    nome: doc.data().nome,
+                    telefone: doc.data().telefone,
+                    imagem: doc.data().imagem,
+                    lat: doc.data().lat,
+                    lng: doc.data().lng,
+                    data:doc.data().data,
+                    chave: doc.id 
+                });
+            });
+            setContato(aux)
+        });
+      }, []);
+
+
     const[altera, setAltera] = useState(false)
     
 
-    const alterarOContato = (nome, telefone, imagemURI) => {
+    const alterarOContato = async(nome, telefone, imagemURI) => {
 
-        setContato([{id: key, nome:nome, telefone:telefone, imagemURI:imagemURI}]);
+        db.collection('contatos').doc(contato.chave).delete()
 
-        dispatch(contatosActions.altContato(key, nome, telefone, imagemURI))
+        const localizacao = await capturarLocalizacao();
+
+        let latitude = localizacao.coords.latitude;
+        let longitude = localizacao.coords.longitude;
+
+        let data = new Date().toString();
+
+        db.collection('contatos').add({
+        nome: nome,
+        telefone: telefone,
+        imagem: imagemURI,
+        lat: latitude,
+        lng: longitude,
+        data: data
+        })
 
         props.navigation.goBack();
 
     }
 
+    const capturarLocalizacao = async() => {
+        const temPermissao = await verificaPermissoes();
+        if(temPermissao){
+          try{
+            const localizacao = await Location.getCurrentPositionAsync({timeout: 8000});
+            return localizacao;
+          }
+          catch(err){
+            Alert.alert(
+              "Impossível obter localização",
+              "Tente novamente mais tarde ou escolha uma no mapa",
+              [{ text: "Ok" }]
+            )
+          }
+    
+        }
+    
+      }
+    
+      const verificaPermissoes = async () => {
+        const resultado = await Permissions.askAsync(Permissions.LOCATION);
+        if(resultado.status !== "granted"){
+          Alert.alert(
+            'Sem permissão para uso do mecanismo de localização',
+            'É preciso liberar acesso ao mecanismo de localização',
+            [{text: 'OK'}]
+          )
+          return false;
+        }
+        return true;
+      }
 
     let alteraContato = <View/>;
     
@@ -48,7 +115,7 @@ const Contatos = (props) => {
                     data = {contato}
                     renderItem = {cont => ( 
                         <View>
-                            <Image  style={estilos.imagem} source={{uri:cont.item.imagemURI}}/>
+                            <Image  style={estilos.imagem} source={{uri:cont.item.imagem}}/>
                             <Cartao estilos={estilos.itemNaLista}>
                                 <Text style={estilos.texto}>Nome: {cont.item.nome} </Text>
                                 <Text style={estilos.texto}> Telefone: {cont.item.telefone} </Text>
